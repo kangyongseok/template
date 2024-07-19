@@ -3,3 +3,6 @@
 - next app route 14
 - tailwind css 3
 - @tanstack/react-query
+- react-toastify
+- shadcn ui
+
