@@ -1,23 +1,33 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, RefObject } from "react";
 
-export default function useEventListener(
-	eventType,
-	callback,
-	element?: Document
+type EventType = keyof DocumentEventMap;
+
+export default function useEventListener<K extends EventType>(
+  eventType: K,
+  callback: (event: DocumentEventMap[K]) => void,
+  element?: Document | RefObject<HTMLElement>
 ) {
-	const callbackRef = useRef(callback);
+  const callbackRef = useRef(callback);
 
-	useEffect(() => {
-		callbackRef.current = callback;
-	}, [callback]);
+  useEffect(() => {
+    callbackRef.current = callback;
+  }, [callback]);
 
-	useEffect(() => {
-		if (element == null) {
-			return;
-		}
-		const handler = (e) => callbackRef.current(e);
-		element.addEventListener(eventType, handler);
+  useEffect(() => {
+    const targetElement: Document | HTMLElement | null = 
+      (element && 'current' in element) ? element.current : 
+      element || 
+      document;
 
-		return () => element.removeEventListener(eventType, handler);
-	}, [eventType, element]);
+    if (!targetElement) {
+      return;
+    }
+
+    const handler = (e: Event) => {
+      callbackRef.current(e as DocumentEventMap[K]);
+    };
+    targetElement.addEventListener(eventType, handler);
+
+    return () => targetElement.removeEventListener(eventType, handler);
+  }, [eventType, element]);
 }

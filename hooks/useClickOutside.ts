@@ -1,14 +1,15 @@
+import { RefObject } from "react";
 import useEventListener from "./useEventListener";
 
-export default function useClickOutside(ref, cb) {
-	useEventListener(
-		"click",
-		(e) => {
-			if (ref.current == null || ref.current.contains(e.target)) {
-				return;
-			}
-			cb(e);
-		},
-		document
-	);
+export default function useClickOutside(ref: RefObject<HTMLElement>, cb: (event: MouseEvent) => void) {
+  useEventListener(
+    "click",
+    (e: MouseEvent) => {
+      if (ref.current == null || ref.current.contains(e.target as Node)) {
+        return;
+      }
+      cb(e);
+    },
+    document
+  );
 }

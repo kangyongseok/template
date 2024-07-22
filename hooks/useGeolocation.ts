@@ -1,32 +1,50 @@
 import { useState, useEffect } from "react";
 
-export default function useGeolocation(options) {
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState();
-	const [data, setData] = useState({});
+interface GeolocationOptions {
+  enableHighAccuracy?: boolean;
+  timeout?: number;
+  maximumAge?: number;
+}
 
-	useEffect(() => {
-		const successHandler = (e) => {
-			setLoading(false);
-			setError(null);
-			setData(e.coords);
-		};
-		const errorHandler = (e) => {
-			setError(e);
-			setLoading(false);
-		};
-		navigator.geolocation.getCurrentPosition(
-			successHandler,
-			errorHandler,
-			options
-		);
-		const id = navigator.geolocation.watchPosition(
-			successHandler,
-			errorHandler,
-			options
-		);
-		return () => navigator.geolocation.clearWatch(id);
-	}, [options]);
+interface GeolocationCoordinates {
+  latitude: number;
+  longitude: number;
+  altitude?: number | null;
+  accuracy: number;
+  altitudeAccuracy?: number | null;
+  heading?: number | null;
+  speed?: number | null;
+}
 
-	return { loading, error, data };
+interface GeolocationState {
+  loading: boolean;
+  error: GeolocationPositionError | null;
+  data: GeolocationCoordinates | null;
+}
+
+export default function useGeolocation(options?: GeolocationOptions): GeolocationState {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<GeolocationPositionError | null>(null);
+  const [data, setData] = useState<GeolocationCoordinates | null>(null);
+
+  useEffect(() => {
+    const successHandler = (position: GeolocationPosition) => {
+      setLoading(false);
+      setError(null);
+      setData(position.coords);
+    };
+
+    const errorHandler = (error: GeolocationPositionError) => {
+      setError(error);
+      setLoading(false);
+    };
+
+    navigator.geolocation.getCurrentPosition(successHandler, errorHandler, options);
+
+    const id = navigator.geolocation.watchPosition(successHandler, errorHandler, options);
+
+    return () => navigator.geolocation.clearWatch(id);
+  }, [options]);
+
+  return { loading, error, data };
 }
