@@ -1,4 +1,5 @@
 import { RefObject } from "react";
+
 import useEventListener from "./useEventListener";
 
 export default function useClickOutside(ref: RefObject<HTMLElement>, cb: (event: MouseEvent) => void) {

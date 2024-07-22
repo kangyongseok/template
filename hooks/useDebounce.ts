@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+
 import useTimeout from "./useTimeout";
 
 type Callback = () => void;

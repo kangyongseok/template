@@ -7,4 +7,4 @@
 - [shadcn ui](https://ui.shadcn.com/docs/components/accordion)
 - [svgr/cli 사용](https://react-svgr.com/docs/cli/)
 - jotai
-
+- [custom hook 참고](https://github.com/sergeyleschev/react-custom-hooks?tab=readme-ov-file#13-usegeolocation)
