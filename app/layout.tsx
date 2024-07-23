@@ -1,3 +1,6 @@
+import ReactQueryProviders from "@/hooks/useReactQuery";
+import ProviderStore from "@/provider/ProviderStore";
+
 import localFont from "next/font/local";
 
 import type { Metadata } from "next";
@@ -63,7 +66,11 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="ko">
-			<body className={pretendard.variable}>{children}</body>
+			<body className={pretendard.variable}>
+				<ReactQueryProviders>
+					<ProviderStore>{children}</ProviderStore>
+				</ReactQueryProviders>
+			</body>
 		</html>
 	);
 }
