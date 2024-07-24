@@ -10,6 +10,9 @@
     "prepare": "husky",
     "icon": "npx @svgr/cli --jsx-runtime automatic --typescript --out-dir /components/Icons -- svg && pnpm --filter=components lint:icon"
   },
+  "engines": {
+    "pnpm": "9.4.0"
+  },
   "lint-staged": {
     "app/**/*.{js,jsx,ts,tsx}": [
       "eslint --fix",
